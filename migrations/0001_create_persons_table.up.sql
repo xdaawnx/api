@@ -1,0 +1,5 @@
+CREATE TABLE IF NOT EXISTS persons (
+    name VARCHAR(100) NOT NULL,
+    country VARCHAR(100) NOT NULL
+);
+

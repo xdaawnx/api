@@ -1,0 +1,130 @@
+basePath: /
+definitions:
+  dto.TimeResponse:
+    properties:
+      date:
+        type: string
+      dateTime:
+        type: string
+      day:
+        type: integer
+      dayOfWeek:
+        type: string
+      dstActive:
+        type: boolean
+      hour:
+        type: integer
+      milliSeconds:
+        type: integer
+      minute:
+        type: integer
+      month:
+        type: integer
+      seconds:
+        type: integer
+      time:
+        type: string
+      timeZone:
+        type: string
+      year:
+        type: integer
+    type: object
+  util.Response:
+    properties:
+      data:
+        description: Data is omitted if empty
+      message:
+        type: string
+    type: object
+  util.ResponseWithoutData:
+    properties:
+      message:
+        type: string
+    type: object
+info:
+  contact: {}
+  description: API
+  title: API
+  version: "1.0"
+paths:
+  /GetCountry/{name}:
+    get:
+      description: Retrieve country based on person's name
+      parameters:
+      - description: Person Name
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            additionalProperties: true
+            type: object
+        "500":
+          description: Internal Server Error
+          schema:
+            additionalProperties: true
+            type: object
+      summary: Get country by person name
+      tags:
+      - persons
+  /GetCurrentTime:
+    get:
+      description: Retrieve current time based on the provided timezone
+      parameters:
+      - description: Timezone
+        in: query
+        name: timezone
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.TimeResponse'
+              type: object
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/util.ResponseWithoutData'
+      security:
+      - BearerAuth: []
+      summary: Get current time by timezone
+      tags:
+      - time
+  /users/test:
+    get:
+      description: Retrieves details of the logged-in user
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            allOf:
+            - $ref: '#/definitions/util.Response'
+            - properties:
+                data:
+                  $ref: '#/definitions/dto.TimeResponse'
+              type: object
+      security:
+      - BearerAuth: []
+      summary: Get user details
+      tags:
+      - users
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
+swagger: "2.0"
